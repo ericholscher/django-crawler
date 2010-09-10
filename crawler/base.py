@@ -157,7 +157,7 @@ class Crawler(object):
 
         # To avoid tainting our memory usage stats with startup overhead we'll
         # do one extra request for the first page now:
-        self.c.get(*self.not_crawled[0][-1])
+        self.c.get(self.not_crawled[0][-1])
 
         while self.not_crawled:
             #Take top off not_crawled and evaluate it
