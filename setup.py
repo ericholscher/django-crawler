@@ -13,4 +13,7 @@ setup(
     author_email = "eric@ericholscher.com",
     description = "A crawler using the Django Test Client",
     url = "http://github.com/ericholscher/django-crawler/tree/master",
+    requires = [
+        "django-performance-tools",
+    ]
 )
