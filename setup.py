@@ -7,6 +7,7 @@ setup(
         "crawler",
         "crawler.management",
         "crawler.management.commands",
+        "crawler.plugins",
     ],
     author = "Eric Holscher, Chris Adams",
     author_email = "eric@ericholscher.com",
