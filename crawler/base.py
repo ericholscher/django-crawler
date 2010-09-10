@@ -8,8 +8,8 @@ from django.db import transaction
 from django.test.client import Client
 from django.test.utils import setup_test_environment, teardown_test_environment
 
-from test_utils.crawler import signals as test_signals
-from test_utils.crawler.plugins.base import Plugin
+from crawler import signals as test_signals
+from crawler.plugins.base import Plugin
 
 LOG = logging.getLogger('crawler')
 

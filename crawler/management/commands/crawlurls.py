@@ -7,7 +7,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.admindocs.views import extract_views_from_urlpatterns
 
-from test_utils.crawler.base import Crawler
+from crawler.base import Crawler
 
 class LogStatsHandler(logging.Handler):
     stats = defaultdict(int)
@@ -100,15 +100,15 @@ class Command(BaseCommand):
         for p in options['plugins']:
             # This nested try is somewhat unsightly but allows easy Pythonic
             # usage ("--enable-plugin=tidy") instead of Java-esque
-            # "--enable-plugin=test_utils.crawler.plugins.tidy"
+            # "--enable-plugin=crawler.plugins.tidy"
             try:
                 try:
                     plugin_module = __import__(p)
                 except ImportError:
                     if not "." in p:
                         plugin_module = __import__(
-                            "test_utils.crawler.plugins.%s" % p,
-                            fromlist=["test_utils.crawler.plugins"]
+                            "crawler.plugins.%s" % p,
+                            fromlist=["crawler.plugins"]
                         )
                     else:
                         raise

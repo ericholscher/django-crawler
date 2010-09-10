@@ -1,4 +1,4 @@
-from test_utils.crawler import signals as test_signals
+from crawler import signals as test_signals
 
 class Plugin(object):
     """
