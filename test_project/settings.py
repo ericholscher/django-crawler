@@ -1,7 +1,7 @@
 import os
 PROJECT_DIR = os.path.dirname(__file__)
-#DEBUG = True
-DEBUG = False
+DEBUG = True
+#DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = ()
@@ -43,5 +43,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.admin',
     'polls',
+    'crawler',
     'test_app',
 )
