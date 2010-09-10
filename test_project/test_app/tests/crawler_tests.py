@@ -1,10 +1,15 @@
 """
 This file is to test testmaker. It will run over the polls app and with the crawler and with test maker outputting things. Hopefully this will provide a sane way to test testmaker.
 """
-from django.test.testcases import TestCase
-from crawler.base import Crawler
+
 import logging
 import os
+import shutil
+import tempfile
+
+from django.test.testcases import TestCase
+
+from crawler.base import Crawler
 
 class CrawlerTests(TestCase):
     """
@@ -59,21 +64,24 @@ class CrawlerTests(TestCase):
         output = logs.read()
         self.assertTrue(output.find('Memory consumed:') != -1)
 
+    def test_heap_plugin(self):
+        try:
+            from crawler.plugins.heap import HeapPlugin
+        except ImportError, e:
+            logging.warning("Heap plugin cannot be tested due to import error: %s", e)
+            return
 
-    #Guppy makes the tests take a lot longer, uncomment this if you want to
-    #test it.
-    """
-    def test_guppy_plugin(self):
-        #This isn't testing much, but I can't know how long the time will take
-        from crawler.plugins.guppy_plugin import ACTIVE, Heap
-        if ACTIVE:
-            Heap.active = True
-            c = Crawler('/')
+        output_dir = tempfile.mkdtemp()
+        try:
+            c = Crawler('/', output_dir=output_dir)
+            c.plugins.append(HeapPlugin())
             c.run()
-            logs = open('crawler_log')
-            output = logs.read()
-            import ipdb; ipdb.set_trace()
-            self.assertTrue(output.find('heap') != -1)
-        else:
-            print "Skipping memory test, as guppy isn't installed"
-    """
+
+            heap_report = os.path.join(output_dir, "heap.csv")
+
+            self.assertTrue(os.path.exists(heap_report))
+
+            heap_data = file(heap_report).readlines()
+            self.assertNotEqual(len(heap_data), 0)
+        finally:
+            shutil.rmtree(output_dir)
