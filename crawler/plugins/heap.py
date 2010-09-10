@@ -19,13 +19,14 @@ class HeapPlugin(Plugin):
     def __init__(self):
         super(HeapPlugin, self).__init__()
         self.heap_urls = self.data['heap_urls'] = {}
-        self.csv_writer = None
+        self.csv_writer = self.csv_file = None
 
     def set_output_dir(self, output_dir=None):
         super(HeapPlugin, self).set_output_dir(output_dir)
 
         if output_dir:
-            self.csv_writer = csv.writer(open(os.path.join(output_dir, 'heap.csv'), 'w'))
+            self.csv_file = open(os.path.join(output_dir, 'heap.csv'), "w")
+            self.csv_writer = csv.writer(self.csv_file)
 
     def pre_request(self, sender, **kwargs):
         url = kwargs['url']
@@ -43,6 +44,9 @@ class HeapPlugin(Plugin):
 
     def finish_run(self, sender, **kwargs):
         "Print the most heap consumed by a view"
+
+        if self.csv_file:
+            self.csv_file.close()
 
         alist = sorted(self.heap_urls.iteritems(),
             key=lambda (k,v): (v,k),
