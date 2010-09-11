@@ -15,6 +15,7 @@ class HeapPlugin(Plugin):
     """
     Calculate heap consumed before and after request
     """
+    active = False
 
     def __init__(self):
         super(HeapPlugin, self).__init__()

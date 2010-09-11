@@ -57,12 +57,16 @@ class CrawlerTests(TestCase):
 
     def test_memory_plugin(self):
         from crawler.plugins.memory_plugin import Memory
-        Memory.active = True
-        c = Crawler('/')
-        c.run()
-        logs = open('crawler_log')
-        output = logs.read()
-        self.assertTrue(output.find('Memory consumed:') != -1)
+        try:
+            Memory.active = True
+            c = Crawler('/')
+            c.run()
+            logs = open('crawler_log')
+            output = logs.read()
+            self.assertTrue(output.find('Memory consumed:') != -1)
+        finally:
+            # Avoid running this plugin for all of the other tests:
+            Memory.active = False
 
     def test_heap_plugin(self):
         try:

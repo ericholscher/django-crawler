@@ -29,6 +29,18 @@ class Plugin(object):
         # be saved:
         self.output_dir = None
 
+    def __del__(self):
+        if hasattr(self, 'pre_request'):
+            test_signals.pre_request.disconnect(self.pre_request)
+        if hasattr(self, 'post_request'):
+            test_signals.post_request.disconnect(self.post_request)
+        if hasattr(self, 'start_run'):
+            test_signals.start_run.disconnect(self.start_run)
+        if hasattr(self, 'finish_run'):
+            test_signals.finish_run.disconnect(self.finish_run)
+        if hasattr(self, 'urls_parsed'):
+            test_signals.urls_parsed.disconnect(self.urls_parsed)
+
     """
     #These functions enable instance['test'] to save to instance.data
     def __setitem__(self, key, val):

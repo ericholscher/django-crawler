@@ -188,6 +188,15 @@ class Crawler(object):
 
         test_signals.finish_run.send(self)
 
+        # FIXME: We're leaking references somewhere, which breaks our tests
+        # when the heap plugin is active and more than one Crawler runs; this
+        # could be avoided entirely by switching to a less magic plugin
+        # registration / loading scenario
+
+        for p in self.plugins:
+            p.__del__()
+            del p
+
         teardown_test_environment()
 
         settings.DEBUG = old_DEBUG
