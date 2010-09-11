@@ -7,7 +7,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.admindocs.views import extract_views_from_urlpatterns
 
-from crawler.base import Crawler
+from ...crawler.base import Crawler
 
 class LogStatsHandler(logging.Handler):
     stats = defaultdict(int)
