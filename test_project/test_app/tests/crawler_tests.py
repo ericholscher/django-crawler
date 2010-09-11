@@ -89,3 +89,22 @@ class CrawlerTests(TestCase):
             self.assertNotEqual(len(heap_data), 0)
         finally:
             shutil.rmtree(output_dir)
+
+    def test_query_count_plugin(self):
+        from crawler.plugins.query_count import QueryCount
+
+        output_dir = tempfile.mkdtemp()
+        try:
+            c = Crawler('/', output_dir=output_dir)
+            c.plugins.append(QueryCount())
+            c.run()
+
+            qc_report = os.path.join(output_dir, "query_counts.csv")
+
+            self.assertTrue(os.path.exists(qc_report))
+
+            qc_data = file(qc_report).readlines()
+            self.assertNotEqual(len(qc_data), 0)
+        finally:
+            shutil.rmtree(output_dir)
+
