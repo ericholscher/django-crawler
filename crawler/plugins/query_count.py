@@ -19,7 +19,7 @@ class QueryCount(Plugin):
     def __init__(self):
         super(QueryCount, self).__init__()
 
-        self.csv_writer = None
+        self.csv_file = self.csv_writer = None
 
         self.query_counts = self.data['query_counts'] = {}
 
