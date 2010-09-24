@@ -40,7 +40,7 @@ Step 3: The syntax for invoking the crawler looks like:
 
 .. sourcecode:: python
 
-     ./manage.py crawler [options] [relative_start_url]
+     ./manage.py crawl [options] [relative_start_url]
 
 Relative start URLs are assumed to be relative to the site root and should
 look like 'some/path', 'home', or even '/'. The relative start URL will be
