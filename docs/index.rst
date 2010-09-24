@@ -32,7 +32,7 @@ Usage
 
 The crawler is implemented as a management command.
 
-Step 1: `pip install django-crawler`
+Step 1: `pip install -e git://github.com/ericholscher/django-crawler#egg=crawler`
 
 Step 2: Add `crawler` to your `INSTALLED_APPS`
 
