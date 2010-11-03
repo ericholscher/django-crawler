@@ -46,7 +46,9 @@ class Command(BaseCommand):
 
         auth = _parse_auth(options.get('auth'))
 
-        if verbosity > 1:
+        if verbosity == 3:
+            log_level = 1
+        elif verbosity == 2:
             log_level = logging.DEBUG
         elif verbosity:
             log_level = logging.INFO

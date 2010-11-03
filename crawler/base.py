@@ -12,6 +12,9 @@ from django.test.utils import setup_test_environment, teardown_test_environment
 from crawler import signals as test_signals
 from crawler.plugins.base import Plugin
 
+#Used for less useful debug output.
+SUPER_DEBUG = 5
+
 LOG = logging.getLogger('crawler')
 
 try:
@@ -102,7 +105,7 @@ class Crawler(object):
                 continue
 
             if parsed_href.scheme and not parsed_href.netloc.startswith("testserver"):
-                LOG.debug("Skipping external link: %s", link)
+                LOG.log(SUPER_DEBUG, "Skipping external link: %s", link)
                 continue
 
             if parsed_href.path.startswith('/'):
@@ -190,7 +193,7 @@ class Crawler(object):
             #Find its links that haven't been crawled
             for base_url in returned_urls:
                 if not self.ascend and not base_url.startswith(self.base_url):
-                    LOG.debug("Skipping %s - outside scope of %s", base_url, self.base_url)
+                    LOG.log(SUPER_DEBUG, "Skipping %s - outside scope of %s", base_url, self.base_url)
                     continue
 
                 if base_url not in [to for dep,fro,to in self.not_crawled] and not self.crawled.has_key(base_url):
