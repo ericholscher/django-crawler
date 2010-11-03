@@ -42,6 +42,11 @@ Step 3: The syntax for invoking the crawler looks like:
 
      ./manage.py crawl [options] [relative_start_url]
 
+
+.. note::
+
+    Running a simple `./manage.py crawl` will work.
+
 Relative start URLs are assumed to be relative to the site root and should
 look like 'some/path', 'home', or even '/'. The relative start URL will be
 normalized with leading and trailing slashes if they are not provided. The
@@ -58,9 +63,12 @@ This allows it to have features that other crawlers can't have.
 Options
 ~~~~~~~
 
--v --verbosity [0,1,2]
+-v --verbosity [0,1,2,3]
 ~~~~~~~~~~~~~~~~~~~~~~
 
 Same as most django apps. Set it to 2 to get a lot of output. 1 is the
 default, which will only output errors.
+
+Setting output to 3 will show possibly really verbose debug output. This
+includes links that go over the depth allowed, and external links in your HTML.
 
