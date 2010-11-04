@@ -8,6 +8,8 @@ The code
 
 You can find the code on github: http://github.com/ericholscher/django-crawler
 
+The mailing list for the project is on Google Groups: http://groups.google.com/group/django-testing
+
 
 
 Usage
