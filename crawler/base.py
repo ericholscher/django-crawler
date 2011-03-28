@@ -108,7 +108,10 @@ class Crawler(object):
                 LOG.log(SUPER_DEBUG, "Skipping external link: %s", link)
                 continue
 
-            if parsed_href.path.startswith('/'):
+            if ('django.contrib.staticfiles' in settings.INSTALLED_APPS
+                and parsed_href.path.startswith(settings.STATIC_URL)):
+                LOG.debug("Skipping static file %s", parsed_href.path)
+            elif parsed_href.path.startswith('/'):
                 returned_urls.append(link)
             else:
                 # We'll use urlparse's urljoin since that handles things like <a href="../foo">
