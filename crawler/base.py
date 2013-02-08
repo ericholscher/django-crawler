@@ -59,8 +59,7 @@ class Crawler(object):
         self.conf_urls = conf_urls
         self.verbosity = verbosity
         self.ascend = ascend
-
-        auth = kwargs.get('auth')
+        self.auth = kwargs.get('auth') 
 
         if output_dir:
             assert os.path.isdir(output_dir)
@@ -68,29 +67,36 @@ class Crawler(object):
             LOG.info("Output will be saved to %s" % self.output_dir)
         else:
             self.output_dir = None
-
+        
         #These two are what keep track of what to crawl and what has been.
         self.not_crawled = [(0, 'START',self.base_url)]
         self.crawled = {}
 
         self.c = Client(REMOTE_ADDR='127.0.0.1')
 
-        if auth:
-            printable_auth = ', '.join(
-                '%s: %s' % (key, cleanse_setting(key.upper(), value))
-                for key, value in auth.items())
-            LOG.info('try logging in with %s' % printable_auth)
-            if self.c.login(**auth):
-                LOG.info('logged in successfully')
-            else:
-                raise CommandError("logon not possible, check credentials")
-
+        #login, and remember the user which was logged in
+        if self.auth:
+            self._login(self.auth)
+            self.user = self.c.session['_auth_user_id']
+        
         self.plugins = []
         for plug in Plugin.__subclasses__():
             active = getattr(plug, 'active', True)
             if active:
                 #TODO: Check if plugin supports writing CSV (or to a file in general?)
                 self.plugins.append(plug())
+
+    def _login(self, auth):
+        if not auth:
+            return
+        printable_auth = ', '.join(
+            '%s: %s' % (key, cleanse_setting(key.upper(), value))
+            for key, value in auth.items())
+        LOG.info('try logging in with %s' % printable_auth)
+        if self.c.login(**auth):
+            LOG.info('logged in successfully')
+        else:
+            raise CommandError("logon not possible, check credentials")      
 
     def _parse_urls(self, url, resp):
         parsed = urlparse.urlparse(url)
@@ -137,6 +143,10 @@ class Crawler(object):
         LOG.debug("%s: link to %s with parameters %s", from_url, to_url, request_dict)
 
         test_signals.pre_request.send(self, url=to_url, request_dict=request_dict)
+
+        # check whether we are still logged in with correct uid, if not, relogin
+        if '_auth_user_id' not in self.c.session or self.c.session['_auth_user_id'] != self.user:
+            self._login(self.auth)
 
         resp = self.c.get(url_path, request_dict, follow=False)
 
