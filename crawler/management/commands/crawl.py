@@ -34,7 +34,7 @@ class Command(BaseCommand):
         make_option('--no-parent', action='store_true', dest="no_parent", default=False,
             help='Do not crawl URLs which do not start with your base URL'),
         make_option('-a', "--auth", action='store', dest='auth', default=None,
-            help='Authenticate (login:user,password:secret) before crawl')
+            help='Authenticate before crawl. Example: --auth username:foo,password:bar')
     )
 
     help = "Displays all of the url matching routes for the project."

@@ -11,6 +11,7 @@ from django.test.utils import setup_test_environment, teardown_test_environment
 
 from crawler import signals as test_signals
 from crawler.plugins.base import Plugin
+from django.core.management.base import CommandError
 
 #Used for less useful debug output.
 SUPER_DEBUG = 5
@@ -78,8 +79,11 @@ class Crawler(object):
             printable_auth = ', '.join(
                 '%s: %s' % (key, cleanse_setting(key.upper(), value))
                 for key, value in auth.items())
-            LOG.info('Log in with %s' % printable_auth)
-            self.c.login(**auth)
+            LOG.info('try logging in with %s' % printable_auth)
+            if self.c.login(**auth):
+                LOG.info('logged in successfully')
+            else:
+                raise CommandError("logon not possible, check credentials")
 
         self.plugins = []
         for plug in Plugin.__subclasses__():
